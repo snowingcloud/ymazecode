@@ -1,8 +1,12 @@
 function [ p,h,trend ] = EventRelated( Timestamp,Event,EWin,WWin,Bin,nDivide,alpha )
 %EVENTRELATED examine if a neuron is event-related
-% 
+%   INPUT
 %   EWin: Event window; e.g. [-3 3]
 %   WWin: Wider window (as basline activity); e.g. [-20 20]
+%   
+%   OUTPUT
+%   trend: 1 means neural activity was increased during Event 
+%          -1 means neural activity was decreased during Event
 if(nargin<7)
     alpha = 0.05;
 elseif(nargin<6)

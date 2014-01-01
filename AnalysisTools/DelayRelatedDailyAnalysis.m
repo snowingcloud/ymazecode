@@ -6,28 +6,25 @@ if (nargin < 9)
     alpha = 0.05;
 end
 if (nargin < 8)
-    nDivide = 4;
+    nDivide = EWin(2)-EWin(1); %Default divide will be 1 sec
 end
 if (nargin < 7)
-    EventName = 'Event'; %for plot
+    EventName = 'Event'; %EventName will show on plots
 end
 
-
-%  Calculate the SpikeRaster in Delay period
+%  Calculate the SpikeRaster in Event period (e.g. Delay,Reward)
 
 nNeuron = getnNeu(TSCell{1});
-
-nDivide = EWin(2)-EWin(1);
 
 results = zeros(2,5);
 
     
 for i = 1:nNeuron
-    hNeu = false;
-    trendNeu = 0;
+    hNeu = false; %hNeu==1:delay related; hNeu==0:delay neutral
+    trendNeu = 0; 
    
     for nBlock = 1:3 %3 blocks: pre-treatment; treatment; 3hr post-treatment
-        % verify consistence of neuron
+        % verify consistence of neuron data
         if ~(TSCell{1}{i}.Electrode == TSCell{2}{i}.Electrode && TSCell{2}{i}.Electrode == TSCell{3}{i}.Electrode...
              && TSCell{1}{i}.Unit == TSCell{2}{i}.Unit && TSCell{2}{i}.Unit == TSCell{3}{i}.Unit) 
         errordlg('inconsistence in neuron info');    
@@ -37,7 +34,7 @@ for i = 1:nNeuron
         EventSRCell{nBlock}{i} = getSpikeRaster(TSCell{nBlock}{i}.Timestamp,ETSCell{nBlock},EWin,Bin); %Todo:preallocate EventSR
         [ p,h,trend ] = EventRelated( TSCell{nBlock}{i}.Timestamp,ETSCell{nBlock},EWin,WWin,Bin,nDivide,alpha );
         
-        %testing codes
+        %% testing codes
         if (h == true)
         dispstr = ['Block:' num2str(nBlock) ' Ele:' num2str(TSCell{nBlock}{i}.Electrode) ...
                   ' Unit' num2str(TSCell{nBlock}{i}.Unit) ' Event-Related p:' num2str(p) ' h:' num2str(h) ' Trend:' num2str(trend)];
@@ -64,8 +61,9 @@ for i = 1:nNeuron
        
     hNeu = hNeu|h ; 
     trendNeu = trendNeu + trend;
-    %testing codes end
+    % END of testing codes
     end
+    
     if(hNeu == true)
     
     [ p12,h12,trend12 ] = RankSumTest(EventSRCell{1}{i},EventSRCell{2}{i},alpha);
@@ -90,7 +88,7 @@ for i = 1:nNeuron
                     results(1,5) = results(1,5) + trend13;
                 end
             end
-        else % inactived in delay period
+        else %inactived in delay period
             results(2,1) = results(2,1) +1;
             
             if(h12 == true)

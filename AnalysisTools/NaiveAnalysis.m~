@@ -9,9 +9,8 @@ function [ output_args ] = NaiveAnalysis( TSCell,BaselineT,TestingT,Bin )
 %   Bin (sec): Example: 120 for 120 sec bin
 
 %   Version: 1.0.05
-%   Version: 1.0.1 Auto-set PauseTime
-PauseTime = getPauseTime(TSCell{1}.Timestamp);
-
+PauseTime = 1500; %manually set PauseTime = 1200 sec
+%TODO: Automatically identify the PauseTime(Injection Time)
 
 nNeu = getnNeu(TSCell);
 

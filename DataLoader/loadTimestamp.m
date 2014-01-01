@@ -1,4 +1,4 @@
-function [ Timestamps ] = loadTimestamp( varargin )
+function [ Timestamps ] = loadTimestamp()
 %Load timestamps (in second) from sorted NEV file
 %   input arguments     
 %   'savemat' save output as MAT file

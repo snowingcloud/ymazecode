@@ -3,7 +3,7 @@ function [ PauseTime ] = getPauseTime( Timestamps )
 %   Get the PauseTime(s) from Timestamps
 %   ! Timestamps should be in sec
 %   Version 1.0.0 only gets the first PauseTime
-ISI = 0;
+ISI = 0; % inter spike interval
 for i=1:length(Timestamps)
     ISI = Timestamps(i+1) - Timestamps(i);
     if (ISI > 120) %120 sec without activity
